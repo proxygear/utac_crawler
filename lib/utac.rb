@@ -4,5 +4,5 @@ require "utac/center"
 require "utac/client"
 
 module Utac
-  # Your code goes here...
+
 end

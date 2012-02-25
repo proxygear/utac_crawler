@@ -37,9 +37,10 @@ class Utac::Client
           center_html = get_center_title(html, table_index).first
           if center_html
             title = center_html.content
-            matching = /^.*- (?<title>(['a-zA-Z]{1,}[ ]{0,1})+)\s*/.match(title)
-            #puts "match title #{match_title.inspect} #{match_title[:title]}"
-            c.name = matching[:title] if matching
+            #matching = /^.*- (?<title>(['a-zA-Z]{1,}[ ]{0,1})+)\s*/.match(title)
+            matching = /^.*- ((['a-zA-Z]{1,}[ ]{0,1})+)\s*/.match(title)
+            #puts "match title #{matching.inspect} '#{matching[1]}'"
+            c.name = matching[1] if matching
           
             data = get_center_data(html, table_index).first.content
             data = data.gsub!(/\s+/, ' ')
@@ -57,14 +58,18 @@ class Utac::Client
             raise "no more center"
           end
         rescue Exception => e
-          puts "exception #{e.message}"#" ,\n#{e.backtrace}"
+          puts "exception #{e.message} #{e.backtrace}"#" ,\n#{e.backtrace}"
           error = true
         else
           #puts "next table ..."
           table_index += 1
         end
       end
-      puts "Avrage success #{total_percentage / centers.size}% for #{centers.size} centers (sum #{total_percentage})"
+      if centers.size != 0
+        puts "Avrage success #{total_percentage / centers.size}% for #{centers.size} centers (sum #{total_percentage})"
+      else
+        puts "Failure : centers empty : #{centers}"
+      end
     end
   end
   
